@@ -1,6 +1,5 @@
 .DS_Store
 build
-lib
 lib-cov
 *.seed
 *.log
