@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import PinterestBase from './PinterestBase';
 import { extend } from '../util/PinUtil';
@@ -13,7 +14,6 @@ import { extend } from '../util/PinUtil';
  * <style> prop to the root node of the component.
  */
 export default class PinterestGrid extends PinterestBase {
-
     constructor(props) {
         super(props);
         this.state = { styles: [] };
@@ -32,8 +32,8 @@ export default class PinterestGrid extends PinterestBase {
     shouldComponentUpdate(nextProps, nextState) {
         return (
             this.props.children.length ||
-            (this.props.children.length !== nextProps.children.length) ||
-            (this.state.styles.length !== nextState.styles.length)
+            this.props.children.length !== nextProps.children.length ||
+            this.state.styles.length !== nextState.styles.length
         );
     }
 
@@ -43,9 +43,12 @@ export default class PinterestGrid extends PinterestBase {
      * @returns {object} style key/value map
      */
     getStyle() {
-        return extend({
-            opacity: this.state.styles.length ? 1 : 0
-        }, this.props.style);
+        return extend(
+            {
+                opacity: this.state.styles.length ? 1 : 0,
+            },
+            this.props.style
+        );
     }
 
     /**
@@ -97,7 +100,7 @@ export default class PinterestGrid extends PinterestBase {
                 return {
                     position: 'absolute',
                     top: `${top}px`,
-                    left: `${left}px`
+                    left: `${left}px`,
                 };
             });
             this.setState({ styles });
@@ -132,7 +135,7 @@ export default class PinterestGrid extends PinterestBase {
             const style = child.props.style || {};
             return React.cloneElement(child, {
                 ref: `child-${i}`,
-                style: extend({}, this.state.styles[i], child.props.style)
+                style: extend({}, this.state.styles[i], child.props.style),
             });
         });
     }
@@ -143,17 +146,16 @@ export default class PinterestGrid extends PinterestBase {
     render() {
         return (
             <div ref="root" className="pinterest-grid" style={this.getStyle()}>
-                { this.getUpdatedChildren() }
+                {this.getUpdatedChildren()}
             </div>
         );
     }
-
 }
 
 PinterestGrid.propTypes = {
-    gutter: React.PropTypes.number
+    gutter: PropTypes.number,
 };
 
 PinterestGrid.defaultProps = {
-    gutter: 0
+    gutter: 0,
 };

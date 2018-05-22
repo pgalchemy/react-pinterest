@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import PinterestGridWidgetBase from './PinterestGridWidgetBase';
 import { GUID, URL, COUNT_TYPES } from '../util/PinConst';
@@ -14,19 +15,17 @@ import { GUID, URL, COUNT_TYPES } from '../util/PinConst';
  * @prop {number} columns - the number of columns in the grid
  */
 export default class PinterestProfileWidget extends PinterestGridWidgetBase {
-
     constructor(props) {
         super(props);
         this.data = {
             type: 'user',
             fetchURL: `${URL.PROFILE}${props.user}/pins/?base_scheme=http`,
-            followURL: `https://www.pinterest.com/${props.user}/pins/follow/?guid=${GUID}`
-        }
+            followURL: `https://www.pinterest.com/${props.user}/pins/follow/?guid=${GUID}`,
+        };
         this.logCount(COUNT_TYPES.PROFILE);
     }
-
 }
 
 PinterestProfileWidget.propTypes = {
-    user: React.PropTypes.string.isRequired
+    user: PropTypes.string.isRequired,
 };

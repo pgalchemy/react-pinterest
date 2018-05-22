@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOMServer from 'react-dom/server';
 
 import PinterestBase from './PinterestBase';
@@ -20,7 +21,6 @@ const footerHeaderHeight = 48 + 60;
  * @prop {number} columns - the number of columns in the grid
  */
 export default class PinterestGridWidgetBase extends PinterestBase {
-
     constructor(props) {
         super(props);
         this.state = { pins: [], user: null, board: null };
@@ -35,7 +35,7 @@ export default class PinterestGridWidgetBase extends PinterestBase {
                 this.setState({
                     user: response.data.user,
                     board: response.data.board,
-                    pins: response.data.pins
+                    pins: response.data.pins,
                 });
             } else {
                 console.error('Error in fetching Pin:', response);
@@ -49,7 +49,7 @@ export default class PinterestGridWidgetBase extends PinterestBase {
      */
     getThumbWidth() {
         const { width, columns } = this.props;
-        const availableWidth = width - (padding * 2) - ((columns - 1) * gutter);
+        const availableWidth = width - padding * 2 - (columns - 1) * gutter;
         return Math.floor(availableWidth / columns);
     }
 
@@ -74,8 +74,8 @@ export default class PinterestGridWidgetBase extends PinterestBase {
         const { height, columns } = this.props;
         return {
             width: this.getGridWidth() + 'px',
-            height: height - footerHeaderHeight + 'px'
-        }
+            height: height - footerHeaderHeight + 'px',
+        };
     }
 
     /**
@@ -84,9 +84,9 @@ export default class PinterestGridWidgetBase extends PinterestBase {
      */
     getWidgetStyle() {
         return {
-            width: this.props.width - (padding * 2) + 'px',
-            height: this.props.height - (padding * 2) + 'px'
-        }
+            width: this.props.width - padding * 2 + 'px',
+            height: this.props.height - padding * 2 + 'px',
+        };
     }
 
     /**
@@ -111,7 +111,7 @@ export default class PinterestGridWidgetBase extends PinterestBase {
      * @returns {JSX} the header JSX
      */
     renderHeader() {
-        const {full_name, profile_url, image_small_url} = this.state.user;
+        const { full_name, profile_url, image_small_url } = this.state.user;
         const log = `embed_${this.data.type}_hd`;
         var board_name, board_url;
         if (this.state.board) {
@@ -124,9 +124,13 @@ export default class PinterestGridWidgetBase extends PinterestBase {
                     <img src={image_small_url.replace('_30.jpg', '_60.jpg')} />
                 </Anchor>
                 <span className="grid-widget-header-text">
-                    <Anchor href={profile_url} log={log}>{full_name}</Anchor>
-                    { this.state.board && (
-                        <Anchor href={URL.PINTEREST + board_url} log={log}>{board_name}</Anchor>
+                    <Anchor href={profile_url} log={log}>
+                        {full_name}
+                    </Anchor>
+                    {this.state.board && (
+                        <Anchor href={URL.PINTEREST + board_url} log={log}>
+                            {board_name}
+                        </Anchor>
                     )}
                 </span>
             </div>
@@ -138,13 +142,13 @@ export default class PinterestGridWidgetBase extends PinterestBase {
      * @returns {JSX} the footer JSX
      */
     renderFooter() {
-        const logo = ReactDOMServer.renderToString(<span className="grid-widget-logo"></span>);
+        const logo = ReactDOMServer.renderToString(<span className="grid-widget-logo" />);
         const log = `embed_${this.data.type}_ft`;
-        const text = i18n.translate("Follow On $1", logo);
+        const text = i18n.translate('Follow On $1', logo);
         const width = { width: this.getGridWidth() - border };
         return (
             <Anchor className="grid-widget-footer" style={width} href={this.data.followURL} log={log} popup="follow">
-                <span dangerouslySetInnerHTML={{ __html: text }}></span>
+                <span dangerouslySetInnerHTML={{ __html: text }} />
             </Anchor>
         );
     }
@@ -154,21 +158,22 @@ export default class PinterestGridWidgetBase extends PinterestBase {
      */
     render() {
         const className = `pinterest-widget--grid pinterest-widget--${this.data.type}`;
-        return this.state.user && (
-            <div className={className} style={this.getWidgetStyle()}>
-                { this.renderHeader() }
-                <PinterestGrid style={this.getGridStyle()} gutter={gutter} columns={this.props.columns}>
-                    { this.renderImages() }
-                </PinterestGrid>
-                { this.renderFooter() }
-            </div>
+        return (
+            this.state.user && (
+                <div className={className} style={this.getWidgetStyle()}>
+                    {this.renderHeader()}
+                    <PinterestGrid style={this.getGridStyle()} gutter={gutter} columns={this.props.columns}>
+                        {this.renderImages()}
+                    </PinterestGrid>
+                    {this.renderFooter()}
+                </div>
+            )
         );
     }
-
 }
 
 PinterestGridWidgetBase.propTypes = {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    columns: React.PropTypes.number.isRequired
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    columns: PropTypes.number.isRequired,
 };

@@ -2,20 +2,24 @@ jest.dontMock('../PinterestAnchor');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
-
-const shallowRenderer = TestUtils.createRenderer();
+import TestUtils from 'react-dom/test-utils';
+import ShallowRenderer from 'react-test-renderer/shallow';
+const shallowRenderer = new ShallowRenderer();
 
 // Require the component to test
 const PinterestAnchor = require('../PinterestAnchor').default;
 
 describe('PinterestAnchor', () => {
-
-    const validAnchor = (<PinterestAnchor
-        href="https://pinterest.com/adamburmister"
-        log="test_log"
-        className="test-anchor"
-        style={{ fontWeight: 'bold' }}>Follow Adam Burmister</PinterestAnchor>);
+    const validAnchor = (
+        <PinterestAnchor
+            href="https://pinterest.com/adamburmister"
+            log="test_log"
+            className="test-anchor"
+            style={{ fontWeight: 'bold' }}
+        >
+            Follow Adam Burmister
+        </PinterestAnchor>
+    );
     let shallowRender;
     let anchor;
 
@@ -35,5 +39,4 @@ describe('PinterestAnchor', () => {
         TestUtils.Simulate.click(shallowRender);
         expect(shallowRender.props.onClick).toBeCalled();
     });
-
 });

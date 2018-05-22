@@ -1,4 +1,5 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 
 import { POPUP_OPTIONS } from '../util/PinConst';
 import { log } from '../util/PinUtil';
@@ -12,7 +13,6 @@ import { log } from '../util/PinUtil';
  * @prop {bool} popup - Show url in popup window
  */
 export default class Anchor extends React.Component {
-
     /**
      * Handle click logging and optional popup
      * @param {Event} React event object
@@ -37,9 +37,9 @@ export default class Anchor extends React.Component {
     }
 }
 
-Anchor.propTypes = {
-    href: React.PropTypes.string.isRequired,
-    log: React.PropTypes.string.isRequired,
-    className: React.PropTypes.string,
-    style: React.PropTypes.object
-};
+// Anchor.propTypes = {
+//     href: PropTypes.string.isRequired,
+//     log: PropTypes.string.isRequired,
+//     className: PropTypes.string,
+//     style: PropTypes.object,
+// };

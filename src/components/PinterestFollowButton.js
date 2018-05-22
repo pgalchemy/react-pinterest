@@ -1,5 +1,5 @@
-
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import PinterestBase from './PinterestBase';
 import Anchor from './PinterestAnchor';
@@ -15,7 +15,6 @@ import Util from '../util/PinUtil';
  * @prop {string} user - the username of the user to follow (<username>/<board_name>)
  */
 export default class PinterestFollowButton extends PinterestBase {
-
     constructor(props) {
         super(props);
         if (!props.board && !props.user) {
@@ -32,24 +31,23 @@ export default class PinterestFollowButton extends PinterestBase {
         if (this.props.board) {
             href = `https://www.pinterest.com/${this.props.board}/follow/?guid=${GUID}`;
         } else {
-            href = `https://www.pinterest.com/${this.props.user}/pins/follow/?guid=${GUID}`
+            href = `https://www.pinterest.com/${this.props.user}/pins/follow/?guid=${GUID}`;
         }
         return (
             <Anchor className="pinterest-follow-button" href={href} log="button_follow" popup="follow">
-                <i></i>
+                <i />
                 {this.props.children}
             </Anchor>
         );
     }
-
 }
 
 PinterestFollowButton.propTypes = {
-  board: React.PropTypes.string,
-  user: React.PropTypes.string
+    board: PropTypes.string,
+    user: PropTypes.string,
 };
 
 PinterestFollowButton.defaultProps = {
     board: undefined,
-    user: undefined
+    user: undefined,
 };

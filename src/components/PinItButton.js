@@ -1,6 +1,7 @@
 const isBrowser = typeof window !== 'undefined';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import PinterestBase from './PinterestBase';
 import Anchor from './PinterestAnchor';
@@ -26,7 +27,6 @@ import { log, loadScript, getResolution } from '../util/PinUtil';
  * @prop {string} description - the description of the Pin to create
  */
 export default class PinItButton extends PinterestBase {
-
     constructor(props) {
         super(props);
         this.logCount(COUNT_TYPES.BUTTON);
@@ -39,7 +39,7 @@ export default class PinItButton extends PinterestBase {
     getButtonImage() {
         const { color, large, round } = this.props;
         const shape = round ? 'round' : 'rect';
-        const size = round ? (large ? '32' : '16') : (large ? '28' : '20');
+        const size = round ? (large ? '32' : '16') : large ? '28' : '20';
         const _color = round ? 'red' : color;
         const resolution = getResolution();
         return `//s-passets.pinimg.com/images/pidgets/pinit_bg_en_${shape}_${_color}_${size}_${resolution}.png`;
@@ -70,11 +70,11 @@ export default class PinItButton extends PinterestBase {
      * @param {event} evt - the corresponding click event
      */
     pinAny(evt) {
-        if(!isBrowser) return;
+        if (!isBrowser) return;
         evt.preventDefault();
         var url = URL.PINMARKLET + '?r=' + Math.random() * 99999999;
         loadScript(url, { pinMethod: 'button' });
-        log({ type: 'button_pinit_bookmarklet', href: URL.PIN_CREATE});
+        log({ type: 'button_pinit_bookmarklet', href: URL.PIN_CREATE });
     }
 
     /**
@@ -82,15 +82,15 @@ export default class PinItButton extends PinterestBase {
      * @returns {JSX}
      */
     renderPinOne() {
-        const {pin, media} = this.props;
-        let {url, description} = this.props;
+        const { pin, media } = this.props;
+        let { url, description } = this.props;
         let href;
         if (pin) {
             href = URL.REPIN.replace('<id>', pin) + `?guid=${GUID}`;
         } else {
-            if(isBrowser) {
-              url = url || window.document.URL;
-              description = description || window.document.title;
+            if (isBrowser) {
+                url = url || window.document.URL;
+                description = description || window.document.title;
             }
 
             href = URL.PIN_CREATE + `?guid=${GUID}`;
@@ -99,8 +99,8 @@ export default class PinItButton extends PinterestBase {
             href += `&description=${encodeURIComponent(description)}`;
         }
         return (
-            <Anchor className={this.getClasses()} href={href} log="button_pinit" popup="pin_create" >
-                <i style={this.getButtonStyle()} ></i>
+            <Anchor className={this.getClasses()} href={href} log="button_pinit" popup="pin_create">
+                <i style={this.getButtonStyle()} />
             </Anchor>
         );
     }
@@ -111,8 +111,8 @@ export default class PinItButton extends PinterestBase {
      */
     renderPinAny() {
         return (
-            <a className={this.getClasses()} href={URL.PIN_CREATE} onClick={this.pinAny.bind(this)} >
-              <i style={this.getButtonStyle()} ></i>
+            <a className={this.getClasses()} href={URL.PIN_CREATE} onClick={this.pinAny.bind(this)}>
+                <i style={this.getButtonStyle()} />
             </a>
         );
     }
@@ -134,18 +134,17 @@ export default class PinItButton extends PinterestBase {
             return this.renderPinAny();
         }
     }
-
 }
 
 PinItButton.propTypes = {
-  type: React.PropTypes.oneOf(['any', 'one']),
-  color: React.PropTypes.oneOf(['red', 'white', 'gray']),
-  large: React.PropTypes.bool,
-  round: React.PropTypes.bool,
-  pin: React.PropTypes.string,
-  media: React.PropTypes.string,
-  url: React.PropTypes.string,
-  description: React.PropTypes.string
+    type: PropTypes.oneOf(['any', 'one']),
+    color: PropTypes.oneOf(['red', 'white', 'gray']),
+    large: PropTypes.bool,
+    round: PropTypes.bool,
+    pin: PropTypes.string,
+    media: PropTypes.string,
+    url: PropTypes.string,
+    description: PropTypes.string,
 };
 
 PinItButton.defaultProps = {
@@ -156,5 +155,5 @@ PinItButton.defaultProps = {
     pin: null,
     media: null,
     url: '',
-    description: ''
+    description: '',
 };
