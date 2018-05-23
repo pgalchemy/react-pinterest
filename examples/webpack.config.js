@@ -1,7 +1,8 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
+    mode: 'development',
     devtool: 'source-map',
     entry: [
         'webpack-dev-server/client?http://0.0.0.0:3000',
@@ -14,9 +15,16 @@ module.exports = {
         publicPath: '/dist/',
     },
     module: {
-        loaders: [
-            { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/ },
-            { test: /\.css$/, loader: 'style-loader!css-loader' },
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: { loader: 'babel-loader' },
+            },
+            {
+                test: /\.css$/,
+                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+            },
         ],
     },
     plugins: [new webpack.HotModuleReplacementPlugin()],

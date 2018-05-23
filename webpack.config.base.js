@@ -3,20 +3,20 @@
 var webpack = require('webpack');
 
 module.exports = {
-  module: {
-    loaders: [
-      { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/ }
-    ]
-  },
-  output: {
-    library: 'ReactPinterest',
-    libraryTarget: 'umd'
-  },
-  resolve: {
-    root: [],
-    extensions: ['', '.js']
-  },
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin()
-  ]
+    entry: './src/main.js',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: { loader: 'babel-loader' },
+            },
+        ],
+    },
+    output: {
+        filename: 'react-pinterest.js',
+    },
+    resolve: {
+        extensions: ['.js'],
+    },
 };
