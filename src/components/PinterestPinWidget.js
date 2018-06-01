@@ -341,16 +341,20 @@ export default class PinterestPinWidget extends PinterestBase {
      */
     renderPin() {
         this.logSize = this.props.size === 'small' ? '' : `_${this.props.size}`;
-        return (
-            <span className={`pinterest-widget--pin pin-widget--${this.props.size}`} style={this.props.style}>
-                <i className="pin-widget-repin" style={this.getButtonImage()} onClick={this.handlePinit} />
-                {this.renderHeader()}
-                {this.renderMedia()}
-                {this.renderMeta()}
-                {this.renderDescription()}
-                {this.renderFooter()}
-            </span>
-        );
+        if (this.state.pin && this.state.pin.error) {
+            return <span />;
+        } else {
+            return (
+                <span className={`pinterest-widget--pin pin-widget--${this.props.size}`} style={this.props.style}>
+                    <i className="pin-widget-repin" style={this.getButtonImage()} onClick={this.handlePinit} />
+                    {this.renderHeader()}
+                    {this.renderMedia()}
+                    {this.renderMeta()}
+                    {this.renderDescription()}
+                    {this.renderFooter()}
+                </span>
+            );
+        }
     }
 
     /**
