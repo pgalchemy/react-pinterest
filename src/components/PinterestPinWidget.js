@@ -24,7 +24,7 @@ export default class PinterestPinWidget extends PinterestBase {
         super(props);
         this.logCount(COUNT_TYPES['PIN_' + props.size.toUpperCase()]);
         this.state = { pin: null, showingMenu: false, playingGIF: false };
-        bind(this, 'handleToggleMenu', 'handleToggleGIF', 'handlePinit');
+        bind(this, 'handleToggleMenu', 'handleToggleGIF');
     }
 
     /**
