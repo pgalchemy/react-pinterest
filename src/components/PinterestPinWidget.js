@@ -57,17 +57,6 @@ export default class PinterestPinWidget extends PinterestBase {
     }
 
     /**
-     * Handle the clicking of the Pin It button to open the
-     * Pin create popup form
-     */
-    handlePinit(evt) {
-        evt.preventDefault();
-        const href = `https://www.pinterest.com/pin/${this.state.pin.id}/repin/x/?guid=${GUID}`;
-        window.open(href, 'pin' + new Date().getTime(), POPUP_OPTIONS.PIN_CREATE);
-        log({ type: 'embed_pin_repin' + this.logSize, href: href });
-    }
-
-    /**
      * Get the url for the correctly sized remote image
      * @returns {string} image url
      */
@@ -249,9 +238,12 @@ export default class PinterestPinWidget extends PinterestBase {
         return (
             <Anchor
                 className="pin-widget-pin-link"
-                href={`https://www.pinterest.com/pin/${pin.id}/`}
+                href={`https://www.pinterest.com/pin/create/button/?url=http://pinterest.olayskinadvisor.com/&media=${image}&description=${
+                    pin.description
+                }`}
                 log={'embed_pin_img' + this.logSize}
             >
+                <div className="pinterest-share-button">Save</div>
                 <img
                     className="pin-widget-pin-link-img"
                     alt={pin.description}
@@ -346,7 +338,6 @@ export default class PinterestPinWidget extends PinterestBase {
         } else {
             return (
                 <span className={`pinterest-widget--pin pin-widget--${this.props.size}`} style={this.props.style}>
-                    <i className="pin-widget-repin" style={this.getButtonImage()} onClick={this.handlePinit} />
                     {this.renderHeader()}
                     {this.renderMedia()}
                     {this.renderMeta()}
