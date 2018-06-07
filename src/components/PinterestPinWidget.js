@@ -6,6 +6,7 @@ import Anchor from './PinterestAnchor';
 import { GUID, COUNT_TYPES, URL } from '../util/PinConst';
 import i18n from '../util/i18n';
 import { fetch, bind, getResolution } from '../util/PinUtil';
+import _ from 'lodash';
 
 /**
  * This is a Pinterest Pin widget.
@@ -109,83 +110,45 @@ export default class PinterestPinWidget extends PinterestBase {
         );
     }
 
-    /**
-     * Render helper for the description block, including optional
-     * attribution and stats counts for non-large Pin widget
-     */
-    renderDescription() {
-        const pin = this.state.pin;
-        return (
-            <span className="pin-widget-description">
-                {pin.description}
-                {this.renderAttribution()}
-                {this.props.size !== 'large' && this.renderStats()}
-            </span>
-        );
-    }
-
-    /**
-     * Render helper for the menu button and the optional dropdown menu
-     * for ability to report copyright infringement
-     */
-    renderMenu() {
-        const resolution = getResolution();
-        const image = `url(https://s-passets.pinimg.com/images/pidgets/menu_${resolution}.png)`;
-        return (
-            <span>
-                <a className="pin-widget-menu" style={{ backgroundImage: image }} onClick={this.handleToggleMenu} />
-                {this.state.showingMenu && (
-                    <span className="pin-widget-menu-dropdown">
-                        <Anchor href="https://www.pinterest.com/about/copyright/dmca-pin/" log="embed_pin_report">
-                            {i18n.translate('Copyright issue')}
-                        </Anchor>
-                    </span>
-                )}
-            </span>
-        );
-    }
 
     /**
      * Render helper for rich metadata with fallback to the Pin's domain
      */
     renderMeta() {
         const pin = this.state.pin;
+        const image = this.getPinImage();
         const provider = pin.rich_metadata ? pin.rich_metadata.site_name : pin.domain;
         const metadata = pin.rich_metadata;
         return (
             <span className="pin-widget-meta">
-                {metadata && (
-                    <span>
-                        <Anchor
-                            className="pin-widget-meta-anchor"
-                            href={metadata.url}
-                            log={'embed_pin_domain' + this.logSize}
-                        >
-                            <img
-                                src={metadata.favicon_link}
-                                alt={pin.rich_metadata.site_name}
-                                title={pin.rich_metadata.site_name}
-                            />
-                        </Anchor>
-                        <Anchor
-                            className="pin-widget-meta-anchor"
-                            href={metadata.url}
-                            log={'embed_pin_domain' + this.logSize}
-                        >
-                            {i18n.translate('from <b>$1</b>', provider)}
-                        </Anchor>
-                    </span>
+
+                {/* Pin Description (if applicable) */}
+                { pin.description && (
+                    <p>{_.truncate(pin.description, { 'length': 60 })}</p>
                 )}
-                {!metadata && (
+
+                {/* Buy Button */}
+                {metadata && (
                     <Anchor
-                        className="pin-widget-meta-anchor"
-                        href={'https://' + pin.domain}
+                        className="pinterest-buy-button"
+                        href={metadata.url}
                         log={'embed_pin_domain' + this.logSize}
                     >
-                        {i18n.translate('from <b>$1</b>', provider)}
+                        Buy
                     </Anchor>
                 )}
-                {this.renderMenu()}
+                    
+                {/* Save Button */}
+                <Anchor
+                    className="pinterest-save-button"
+                    href={`https://www.pinterest.com/pin/create/button/?url=http://pinterest.olayskinadvisor.com/&media=${image}&description=${
+                        pin.description
+                    }`}
+                    log={'embed_pin_domain' + this.logSize}
+                >
+                    Save
+                </Anchor>
+                    
             </span>
         );
     }
@@ -243,7 +206,7 @@ export default class PinterestPinWidget extends PinterestBase {
                 }`}
                 log={'embed_pin_img' + this.logSize}
             >
-                <div className="pinterest-share-button">Save</div>
+                {/* <div className="pinterest-share-button">Save</div> */}
                 <img
                     className="pin-widget-pin-link-img"
                     alt={pin.description}
@@ -293,42 +256,6 @@ export default class PinterestPinWidget extends PinterestBase {
     }
 
     /**
-     * Render helper for the footer
-     */
-    renderFooter() {
-        const pin = this.state.pin;
-        const isJapan = this.props.lang === 'ja';
-        return (
-            <span className="pin-widget-footer">
-                <Anchor href={pin.pinner.profile_url} log={'embed_pin_pinner' + this.logSize}>
-                    <img
-                        className="pin-widget-avatar"
-                        alt={pin.pinner.full_name}
-                        title={pin.pinner.full_name}
-                        src={pin.pinner.image_small_url}
-                    />
-                </Anchor>
-                <span>
-                    <Anchor
-                        className="pin-widget-footer-text"
-                        href={pin.pinner.profile_url}
-                        log={'embed_pin_pinner' + this.logSize}
-                    >
-                        <b>{pin.pinner.full_name}</b>
-                    </Anchor>
-                    <Anchor
-                        className="pin-widget-footer-text"
-                        href={`//www.pinterest.com${pin.board.url}`}
-                        log={'embed_pin_board' + this.logSize}
-                    >
-                        {pin.board.name}
-                    </Anchor>
-                </span>
-            </span>
-        );
-    }
-
-    /**
      * Render helper for the entire Pin once the remote fetch has finished
      */
     renderPin() {
@@ -341,8 +268,6 @@ export default class PinterestPinWidget extends PinterestBase {
                     {this.renderHeader()}
                     {this.renderMedia()}
                     {this.renderMeta()}
-                    {this.renderDescription()}
-                    {this.renderFooter()}
                 </span>
             );
         }
