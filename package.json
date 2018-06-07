@@ -1,6 +1,6 @@
 {
     "name": "@pgprojectx/react-pinterest",
-    "version": "2.0.0",
+    "version": "2.1.3",
     "description": "Collection of embeddable Pinterest buttons and widgets",
     "main": "lib/main.js",
     "jsnext:main": "src/main.js",

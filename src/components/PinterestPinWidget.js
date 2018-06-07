@@ -117,25 +117,14 @@ export default class PinterestPinWidget extends PinterestBase {
     renderMeta() {
         const pin = this.state.pin;
         const image = this.getPinImage();
-        const provider = pin.rich_metadata ? pin.rich_metadata.site_name : pin.domain;
-        const metadata = pin.rich_metadata;
+        // const provider = pin.rich_metadata ? pin.rich_metadata.site_name : pin.domain;
+        // const metadata = pin.rich_metadata;
         return (
             <span className="pin-widget-meta">
 
                 {/* Pin Description (if applicable) */}
                 { pin.description && (
                     <p>{_.truncate(pin.description, { 'length': 60 })}</p>
-                )}
-
-                {/* Buy Button */}
-                {metadata && (
-                    <Anchor
-                        className="pinterest-buy-button"
-                        href={metadata.url}
-                        log={'embed_pin_domain' + this.logSize}
-                    >
-                        Buy
-                    </Anchor>
                 )}
                     
                 {/* Save Button */}
@@ -198,24 +187,46 @@ export default class PinterestPinWidget extends PinterestBase {
      * Render helper for a Pin image
      */
     renderImage(pin, image) {
+        const metadata = pin.rich_metadata;
+
         return (
-            <Anchor
-                className="pin-widget-pin-link"
-                href={`https://www.pinterest.com/pin/create/button/?url=http://pinterest.olayskinadvisor.com/&media=${image}&description=${
-                    pin.description
-                }`}
-                log={'embed_pin_img' + this.logSize}
-            >
-                {/* <div className="pinterest-share-button">Save</div> */}
-                <img
-                    className="pin-widget-pin-link-img"
-                    alt={pin.description}
-                    data-pin-nopin="true"
-                    src={image}
-                    width="100%"
-                />
-            </Anchor>
-        );
+            <span>
+
+                {
+                    metadata && metadata.url ? (
+                        <Anchor
+                            className="pin-widget-pin-link"
+                            href={metadata.url}
+                            log={'embed_pin_img' + this.logSize}
+                        >
+                            <img
+                                className="pin-widget-pin-link-img"
+                                alt={pin.description}
+                                data-pin-nopin="true"
+                                src={image}
+                                width="100%"
+                            />
+                        </Anchor>
+                    ) : (
+                        <span
+                            className="pin-widget-pin-link"
+                            log={'embed_pin_img' + this.logSize}
+                        >
+                            <img
+                                className="pin-widget-pin-link-img"
+                                alt={pin.description}
+                                data-pin-nopin="true"
+                                src={image}
+                                width="100%"
+                            />
+                        </span>
+                    )
+                }
+
+            </span>
+        )
+
+        
     }
 
     /**
